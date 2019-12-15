@@ -70,6 +70,7 @@
         <div class="plot" id="plotlydailyHumChart"></div>
         <div class="plot" id="plotlydailyPressChart"></div>
     </div>
+
   </div>
 </template>
 
@@ -78,60 +79,31 @@ export default {
     name: 'MainView',
     props: {
     },
+    mounted(){
+      this.init();
+    },
     methods:{
-        onLoad: function(){
-            /*fetch('getdailyvalues.php').then(function(response) {
-                return response.json();
-            }).then(function(data) {
-                console.log(JSON.stringify(data));
-                let current = document.getElementById("currentTemp");
-                current.innerHTML = parseFloat(data.current.temperature).toFixed(1) + "&deg;";
-                let max= document.getElementById("maxTemp");
-                max.innerHTML = parseFloat(data.max.temperature).toFixed(1) + "&deg;";
-                let min = document.getElementById("minTemp");
-                min.innerHTML = parseFloat(data.min.temperature).toFixed(1) + "&deg;";
-            }).catch(function(error) {
-                console.error(error);
-            });*/
-            /*fetch('getdailydata.php').then(function(response){
+        init: function(){
+           fetch('http://localhost:3000/api/dailydata')
+            .then(function(response){
                 return response.json();
             }).then(function(dailydata){
-                let timedataArr = [];
-                let temperaturedataArr = [];
-                console.log(JSON.stringify(dailydata));
-                for(let i =0; i < dailydata.length; i++)
-                {
-                    timedataArr.push(dailydata[i].time.substring(0, 5));
-                    temperaturedataArr.push(parseFloat(dailydata[i].temperature).toFixed(1));
-                }
-                let tempData = [{
-                    x: timedataArr,
-                    y: temperaturedataArr
-                    }];
-                let tempLayout = {
-                    title: { text: "Vuorokauden lämpötila" },
-                    xaxis:{ title: "Kellonaika"},
-                    yaxis: { title: "Lämpötila"},
-                    margin: {
-                        t: 25,
-                        l: 35,
-                        b: 60,
-                        r: 0
-                        }
-                    };
-                let plotlyTempConfigOptions = {
-                    displayModeBar: false,
-                    responsive: true
-                };
-                DAILYTEMPCHART = document.getElementById('plotlydailyTempChart');
-                Plotly.plot( DAILYTEMPCHART,
-                    tempData,
-                    tempLayout,
-                    plotlyTempConfigOptions
-                );
+              let timedataArr = [];
+              let temperaturedataArr = [];
+
+              // eslint-disable-next-line no-console
+              console.log(JSON.stringify(dailydata));
+              for(let i =0; i < dailydata.length; i++)
+              {
+                  timedataArr.push(dailydata[i].time.substring(0, 5));
+                  temperaturedataArr.push(parseFloat(dailydata[i].temperature).toFixed(1));
+              }
+
+              
             }).catch(function(error){
+              // eslint-disable-next-line no-console
                 console.log(error);
-            });*/
+            });
         }
     }
 }
