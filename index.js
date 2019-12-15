@@ -20,7 +20,7 @@ app.get('/api/dailydata', function(req, res){
 
     db.query(sql,[date], function (err, result, fields) {
         if (err) throw err;
-        console.log(result);
+        //console.log(result);
         res.json(result);
     });
 });

@@ -7,69 +7,7 @@
 
     <hr>
 
-    <div class="boxContainer" id="tableContainer">
-      <!-- tableContainer starts -->
-      <table class="dailyInfoTable" id="dailyInfoTemp">
-        <caption>
-          <h2 class="headers infoHeaders" id="tempHeader">Lämpötila</h2>
-        </caption>
-        <tbody>
-          <tr>
-            <th>Viim</th>
-            <th>Max</th>
-            <th>Min</th>
-          </tr>
-          <tr>
-            <td id="currentTemp"></td>
-            <td id="maxTemp"></td>
-            <td id="minTemp"></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table class="dailyInfoTable" id="dailyInfoHum">
-        <caption>
-          <h2 class="headers infoHeaders" id="humHeader">Ilmankosteus</h2>
-        </caption>
-        <tbody>
-          <tr>
-            <th>Viim</th>
-            <th>Max</th>
-            <th>Min</th>
-          </tr>
-          <tr>
-            <td id="currentHum">27</td>
-            <td id="maxHum">35</td>
-            <td id="minHum">26</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table class="dailyInfoTable" id="dailyInfoPress">
-        <caption>
-          <h2 class="headers infoHeaders" id="pressHeader">Ilmanpaine</h2>
-        </caption>
-        <tbody>
-          <tr>
-            <th>Viim</th>
-            <th>Max</th>
-            <th>Min</th>
-          </tr>
-          <tr>
-            <td id="currentPress">1,024</td>
-            <td id="maxPress">1,026</td>
-            <td id="minPress">1,013</td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- tableContainer ends -->
-    </div>
-
-    <div class="boxContainer" id="plotContainer">
-        <div class="plot" id="plotlydailyTempChart"></div>
-        <div class="plot" id="plotlydailyHumChart"></div>
-        <div class="plot" id="plotlydailyPressChart"></div>
-    </div>
+    <b-table></b-table>
 
   </div>
 </template>
@@ -79,27 +17,42 @@ export default {
     name: 'MainView',
     props: {
     },
+    data(){
+      return{
+        
+        
+        maxValues:{
+          temp: 0
+        },
+        minValues:{
+          temp: 0
+        },
+        currentValues:{
+          temp: 0
+        }
+      }
+    },
     mounted(){
       this.init();
     },
     methods:{
         init: function(){
            fetch('http://localhost:3000/api/dailydata')
-            .then(function(response){
-                return response.json();
-            }).then(function(dailydata){
+            .then(response => response.json())
+            .then(dailydata => {
               let timedataArr = [];
-              let temperaturedataArr = [];
+              let tempdataArr = [];
 
               // eslint-disable-next-line no-console
               console.log(JSON.stringify(dailydata));
               for(let i =0; i < dailydata.length; i++)
               {
                   timedataArr.push(dailydata[i].time.substring(0, 5));
-                  temperaturedataArr.push(parseFloat(dailydata[i].temperature).toFixed(1));
+                  tempdataArr.push(parseFloat(dailydata[i].temperature).toFixed(1));
               }
+            
+            this.maxValues.temp = Math.max(tempdataArr);
 
-              
             }).catch(function(error){
               // eslint-disable-next-line no-console
                 console.log(error);
@@ -154,7 +107,7 @@ td{
 	max-width: 1200px;
 	width: auto;
 	margin: auto;
-	margin-top: 200px;
+	margin-top: 150px;
 }
 #mainHeader{
 	text-align: center;
