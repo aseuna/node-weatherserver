@@ -10,19 +10,41 @@ app.use(bodyParser.json());
 
 
 
-app.get('/api/dailydata', function(req, res){
+app.get("/api/dailydata", async function(req, res){
     
-    var datetime = new Date();
-    var date = datetime.toISOString().slice(0,10);
-    var date = date.replace(/-/g, "");
+    let datetime = new Date();
+    let date = datetime.toISOString().slice(0,10);
+    date = date.replace(/-/g, "");
 
-    var sql = "SELECT date, time, temperature FROM (SELECT date, time, temperature FROM weatherdata WHERE date=?) AS data ORDER BY time ASC;";
-
-    db.query(sql,[date], function (err, result, fields) {
+    let sql = `SELECT date, time, temperature FROM (SELECT date, time, temperature FROM weatherdata WHERE date=${date}) AS data ORDER BY time ASC;`;
+    try{
+        await db.connect();
+        await db.con.query(sql, function (err, result, fields) {
         if (err) throw err;
         //console.log(result);
         res.json(result);
     });
+    }catch(err){
+        console.log(err);
+    }finally{
+        await db.close();
+    }
+});
+
+app.get("/api/peaks", async function(req, res){
+
+    let max = {};
+    let min = {};
+    let current = {};
+
+    try{
+        await db.connect();
+        await db.con.query();
+    }catch(err){
+        console.log(err);
+    }finally{
+        await db.close();
+    }
 });
 
 app.post("/api/data", function(req, res){
