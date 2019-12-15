@@ -1,7 +1,7 @@
 {
-  "name": "weatherserver",
+  "name": "weather-server-node",
   "version": "1.0.0",
-  "description": "nodejs based weatherserver project for personal use",
+  "description": "weather server for personal use",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,23 +11,21 @@
     "url": "git+https://github.com/aseuna/node-weatherserver.git"
   },
   "keywords": [
-    "nodejs",
     "javascript",
-    "js",
-    "weatherserver",
-    "express"
+    "node",
+    "nodejs",
+    "express",
+    "vuejs",
+    "vue"
   ],
-  "author": "Arttu Seuna",
+  "author": "aseuna",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/aseuna/node-weatherserver/issues"
   },
   "homepage": "https://github.com/aseuna/node-weatherserver#readme",
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "mysql": "^2.17.1"
+    "core-js": "^3.5.0",
+    "express": "^4.17.1"
   }
 }

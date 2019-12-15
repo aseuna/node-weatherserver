@@ -74,46 +74,36 @@
 </template>
 
 <script>
-
 export default {
     name: 'MainView',
     props: {
     },
     methods:{
         onLoad: function(){
-
             /*fetch('getdailyvalues.php').then(function(response) {
                 return response.json();
             }).then(function(data) {
                 console.log(JSON.stringify(data));
-
                 let current = document.getElementById("currentTemp");
                 current.innerHTML = parseFloat(data.current.temperature).toFixed(1) + "&deg;";
-
                 let max= document.getElementById("maxTemp");
                 max.innerHTML = parseFloat(data.max.temperature).toFixed(1) + "&deg;";
-
                 let min = document.getElementById("minTemp");
                 min.innerHTML = parseFloat(data.min.temperature).toFixed(1) + "&deg;";
-
             }).catch(function(error) {
                 console.error(error);
             });*/
-
             /*fetch('getdailydata.php').then(function(response){
                 return response.json();
             }).then(function(dailydata){
                 let timedataArr = [];
-
                 let temperaturedataArr = [];
                 console.log(JSON.stringify(dailydata));
-
                 for(let i =0; i < dailydata.length; i++)
                 {
                     timedataArr.push(dailydata[i].time.substring(0, 5));
                     temperaturedataArr.push(parseFloat(dailydata[i].temperature).toFixed(1));
                 }
-
                 let tempData = [{
                     x: timedataArr,
                     y: temperaturedataArr
@@ -133,9 +123,7 @@ export default {
                     displayModeBar: false,
                     responsive: true
                 };
-
                 DAILYTEMPCHART = document.getElementById('plotlydailyTempChart');
-
                 Plotly.plot( DAILYTEMPCHART,
                     tempData,
                     tempLayout,
@@ -144,7 +132,6 @@ export default {
             }).catch(function(error){
                 console.log(error);
             });*/
-
         }
     }
 }
@@ -158,71 +145,57 @@ export default {
 	border: none;
 	font-family: 'Arial', 'Helvetica','sans-serif';
 }
-
 p {
 	font-size: 40px;
 	margin: 20px;
 }
-
 hr{
 	color: black;
 	border: solid;
 	border-style: inset;
 	border-width: 2px;
 }
-
 th, td{
 	font-family: 'Quicksand', sans-serif;
 }
-
 th{
 	border: none;
 	height: 60px;
 	width: 60px;
 	text-align: center;
 }
-
 td{
 	border: none;
 	height: 60px;
 	width: 60px;
 	text-align: center;
-
 }
-
 .headers{
 	font-family: 'Poiret One', cursive;
 }
-
 .dailyInfoTable{
 }
-
 .plot{
 	width: 33.3333333333%;
 }
-
 #mainContainer{
 	max-width: 1200px;
 	width: auto;
 	margin: auto;
 	margin-top: 200px;
 }
-
 #mainHeader{
 	text-align: center;
 	font-size: 110px;
 }
-
 #tableContainer{
 	display: flex;
 	justify-content: space-around;
 }
-
 #plotContainer{
 	display: flex;
 	height: 300px;
 }
-
 #plotlyYearTempChart{
 	width: inherit;
 	height: inherit;
