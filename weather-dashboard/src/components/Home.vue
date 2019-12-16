@@ -1,58 +1,87 @@
 <template>
-  <div class="boxContainer" id="mainContainer">
+    <div class="boxContainer" id="mainContainer">
 
-    <header class="boxContainer" id="mainHeaderContainer">
-        <h1 class="headers" id="mainHeader">Seunalan sääasema</h1>
-    </header>
+        <header class="boxContainer" id="mainHeaderContainer">
+            <h1 class="headers" id="mainHeader">Seunalan sääasema</h1>
+        </header>
 
-    <hr>
+        <hr>
 
-    <b-table caption-top :items="tempTableItems">
-      <template v-slot:table-caption>
-        <h4 class="headers" id="tempTableHeader">
-          Lämpötila
-        </h4>
-      </template>
-    </b-table>
+        <b-table 
+        caption-top 
+        :items="tempTableItems" 
+        :fields="tableFields" 
+        :fixed=true
+        id="tempTable"
+        >
+            <template v-slot:table-caption>
+                <h4 class="headers" id="tempTableHeader">Lämpötila (&deg;C)</h4>
+            </template>
+        </b-table>
 
-  </div>
+    </div>
 </template>
 
 <script>
+var _ = require('lodash');
+
 export default {
     name: 'MainView',
     props: {
     },
     data(){
-      return{
-        tempTableItems: [
-          {max: "", min: "", current: ""}
-        ],
-      }
+        return{
+            tableFields: [
+                {
+                    key: "max"
+                },
+                {
+                    key: "min"
+                },
+                {
+                    key: "current"
+                }
+            ],
+            tempTableItems: [
+                {
+                    max: 0,
+                    min: 0,
+                    current: 0
+                }
+            ],
+        }
     },
     mounted(){
-      this.init();
+        this.init();
     },
     methods:{
         init: function(){
-          fetch('http://localhost:3000/api/dailydata')
-          .then(response => response.json())
-          .then(dailydata => {
-            let timedataArr = [];
-            let tempdataArr = [];
+            fetch('http://localhost:3000/api/dailydata')
+            .then(response => response.json())
+            .then(dailydata => {
+                let timedataArr = [];
+                let tempdataArr = [];
 
-            // eslint-disable-next-line no-console
-            console.log(JSON.stringify(dailydata));
-            for(let i =0; i < dailydata.length; i++)
-            {
-                timedataArr.push(dailydata[i].time.substring(0, 5));
-                tempdataArr.push(parseFloat(dailydata[i].temperature).toFixed(1));
-            }
+                // setting temperature and time datasets to own arrays while rounding temps to 1 decimal
+                for(let i =0; i < dailydata.length; i++)
+                {
+                    timedataArr.push(dailydata[i].time.substring(0, 5));
+                    tempdataArr.push(_.round(parseFloat(dailydata[i].temperature), 1));
+                }
 
-          }).catch(function(error){
-            // eslint-disable-next-line no-console
-              console.log(error);
-          });
+                // setting peak and latest values to table variables from daily temp data
+                this.tempTableItems[0].max = _.max(tempdataArr);
+                this.tempTableItems[0].min = _.min(tempdataArr);
+                this.tempTableItems[0].current = tempdataArr[tempdataArr.length - 1];
+
+
+                // eslint-disable-next-line no-console
+                console.log(tempdataArr);
+            })
+            .catch(function(error){
+                // eslint-disable-next-line no-console
+                console.log(error);
+            });
 
 
         }
@@ -83,19 +112,22 @@ hr{
 	font-family: 'Poiret One', cursive;
 }
 #mainContainer{
-	max-width: 1200px;
+	max-width: 1000px;
 	width: auto;
 	margin: auto;
-	margin-top: 50px;
 }
 #mainHeader{
 	text-align: center;
-	font-size: 110px;
 }
 
 #tempTableHeader{
   text-align: center;
   color: black;
   font-weight: bold;
+}
+
+@media screen and (max-width: 480px){
+    #mainHeader{
+    }
 }
 </style>

@@ -20,10 +20,10 @@ app.get("/api/dailydata", async function(req, res){
     try{
         await db.connect();
         await db.con.query(sql, function (err, result, fields) {
-        if (err) throw err;
-        //console.log(result);
-        res.json(result);
-    });
+            if (err) throw err;
+            // console.log(result);
+            res.json(result);
+        });
     }catch(err){
         console.log(err);
     }finally{
