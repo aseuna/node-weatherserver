@@ -7,48 +7,90 @@
 
         <hr>
 
-        <b-table 
-        caption-top 
-        :items="tempTableItems" 
-        :fields="tableFields" 
-        :fixed=true
-        id="tempTable"
-        >
-            <template v-slot:table-caption>
-                <h4 class="headers" id="tempTableHeader">Lämpötila (&deg;C)</h4>
-            </template>
-        </b-table>
+        <div id="fullTableContainer">
+            <div id="tempTableContainer" class="boxContainer tableContainer">
+                <b-table 
+                caption-top 
+                :items="tempTableItems" 
+                :fields="tableFields" 
+                :fixed="fixed"
+                id="tempTable"
+                >
+                    <template v-slot:table-caption>
+                        <h4 class="headers tableHeaders" id="tempTableHeader">Lämpötila (&deg;C)</h4>
+                    </template>
+                </b-table>
+            </div>
+
+            <div id="humTableContainer" class="boxContainer tableContainer">
+                <b-table 
+                caption-top  
+                :items="humTableItems"
+                :fields="tableFields" 
+                :fixed="fixed"
+                id="tempTable"
+                >
+                    <template v-slot:table-caption>
+                        <h4 class="headers tableHeaders">Ilman suht. kosteus</h4>
+                    </template>
+                </b-table>
+            </div>
+
+            <div id="pressTableContainer" class="boxContainer tableContainer">
+                <b-table 
+                caption-top 
+                :items="pressTableItems"
+                :fields="tableFields" 
+                :fixed="fixed"
+                id="tempTable"
+                >
+                    <template v-slot:table-caption>
+                        <h4 class="headers tableHeaders">Ilmanpaine</h4>
+                    </template>
+                </b-table>
+            </div>
+        </div>
+
+        <div id="fullchartContainer">
+            <v-chart :options="tempChartOption" id="dailyTempChart"/>
+        </div>
 
     </div>
 </template>
 
 <script>
+
+import ECharts from 'vue-echarts';
+import 'echarts/lib/chart/line';
+
 var _ = require('lodash');
 
 export default {
     name: 'MainView',
+    components: {
+        "v-chart": ECharts
+    },
     props: {
     },
     data(){
         return{
+            fixed: true,
             tableFields: [
-                {
-                    key: "max"
-                },
-                {
-                    key: "min"
-                },
-                {
-                    key: "current"
-                }
+                { key: "max" },
+                { key: "min" },
+                { key: "current" }
             ],
             tempTableItems: [
-                {
-                    max: 0,
-                    min: 0,
-                    current: 0
-                }
+                { max: 0, min: 0, current: 0 }
             ],
+            humTableItems: [
+                { max: 0, min: 0, current: 0 }
+            ],
+            pressTableItems: [
+                { max: 0, min: 0, current: 0 }
+            ],
+            tempChartOption:{}
+
         }
     },
     mounted(){
@@ -68,21 +110,36 @@ export default {
                     timedataArr.push(dailydata[i].time.substring(0, 5));
                     tempdataArr.push(_.round(parseFloat(dailydata[i].temperature), 1));
                 }
+                // setting data sets to chart data arrays
+
 
                 // setting peak and latest values to table variables from daily temp data
                 this.tempTableItems[0].max = _.max(tempdataArr);
                 this.tempTableItems[0].min = _.min(tempdataArr);
                 this.tempTableItems[0].current = tempdataArr[tempdataArr.length - 1];
 
-
+                // config options for temperature chart
+                this.tempChartOption = {
+                    xAxis: {
+                        type: 'category',
+                        data: timedataArr
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        data: tempdataArr,
+                        type: 'line'
+                    }]
+                }
                 // eslint-disable-next-line no-console
                 console.log(tempdataArr);
+
             })
             .catch(function(error){
                 // eslint-disable-next-line no-console
                 console.log(error);
             });
-
 
         }
     }
@@ -91,12 +148,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-*{
-	margin: 0;
-	padding: 0;
-	border: none;
-	font-family: 'Arial', 'Helvetica','sans-serif';
-}
+
 p {
 	font-size: 40px;
 	margin: 20px;
@@ -111,8 +163,19 @@ hr{
 .headers{
 	font-family: 'Poiret One', cursive;
 }
+
+.tableHeaders{
+    text-align: center;
+    color: black;
+    font-weight: bold;
+}
+
+.tableContainer{
+    width: 33.33%;
+}
+
 #mainContainer{
-	max-width: 1000px;
+	max-width: 1200px;
 	width: auto;
 	margin: auto;
 }
@@ -120,14 +183,22 @@ hr{
 	text-align: center;
 }
 
-#tempTableHeader{
-  text-align: center;
-  color: black;
-  font-weight: bold;
+#fullTableContainer{
+    display: flex;
+    flex-direction: row;
 }
 
-@media screen and (max-width: 480px){
-    #mainHeader{
+#dailyTempChart{
+    width: 33.33%;
+}
+
+@media screen and (max-width: 580px){
+    .tableContainer{
+        width: 100%;
+    }
+
+    #fullTableContainer{
+        flex-direction: column;
     }
 }
 </style>

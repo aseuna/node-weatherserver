@@ -31,7 +31,7 @@ app.get("/api/dailydata", async function(req, res){
     }
 });
 
-app.get("/api/peaks", async function(req, res){
+app.get("/api/weatherdata", async function(req, res){
 
     let max = {};
     let min = {};
@@ -50,7 +50,7 @@ app.get("/api/peaks", async function(req, res){
 app.post("/api/data", function(req, res){
 
 
-    db.query(sql, function (err, result, fields) {
+    db.con.query(sql, function (err, result, fields) {
         if (err) throw err;
         console.log(result);
         //res.json(result);
