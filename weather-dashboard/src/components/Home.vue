@@ -7,6 +7,10 @@
 
         <hr>
 
+        <header class="boxContainer" id="subHeaderContainer">
+            <h4 class="headers" id="subHeader">{{subHeader}}</h4>
+        </header>
+
         <div id="fullTableContainer">
             <div id="tempTableContainer" class="boxContainer tableContainer">
                 <b-table 
@@ -14,6 +18,7 @@
                 :items="tempTableItems" 
                 :fields="tableFields" 
                 :fixed="fixed"
+                :small="small"
                 id="tempTable"
                 >
                     <template v-slot:table-caption>
@@ -28,6 +33,7 @@
                 :items="humTableItems"
                 :fields="tableFields" 
                 :fixed="fixed"
+                :small="small"
                 id="tempTable"
                 >
                     <template v-slot:table-caption>
@@ -42,6 +48,7 @@
                 :items="pressTableItems"
                 :fields="tableFields" 
                 :fixed="fixed"
+                :small="small"
                 id="tempTable"
                 >
                     <template v-slot:table-caption>
@@ -74,30 +81,38 @@ export default {
     },
     data(){
         return{
+            // misc
+            subHeader: "",
+
+            // table data
             fixed: true,
+            small: true,
             tableFields: [
                 { key: "max" },
                 { key: "min" },
-                { key: "current" }
+                { key: "latest" }
             ],
             tempTableItems: [
-                { max: 0, min: 0, current: 0 }
+                { max: 0, min: 0, latest: 0 }
             ],
             humTableItems: [
-                { max: 0, min: 0, current: 0 }
+                { max: 0, min: 0, latest: 0 }
             ],
             pressTableItems: [
-                { max: 0, min: 0, current: 0 }
+                { max: 0, min: 0, latest: 0 }
             ],
+
+            // chart data
             tempChartOption:{}
 
         }
     },
     mounted(){
-        this.init();
+        this.buildSubHeader();
+        this.fetchDailyData();
     },
     methods:{
-        init: function(){
+        fetchDailyData: function(){
             fetch('http://localhost:3000/api/dailydata')
             .then(response => response.json())
             .then(dailydata => {
@@ -116,7 +131,7 @@ export default {
                 // setting peak and latest values to table variables from daily temp data
                 this.tempTableItems[0].max = _.max(tempdataArr);
                 this.tempTableItems[0].min = _.min(tempdataArr);
-                this.tempTableItems[0].current = tempdataArr[tempdataArr.length - 1];
+                this.tempTableItems[0].latest = tempdataArr[tempdataArr.length - 1];
 
                 // config options for temperature chart
                 this.tempChartOption = {
@@ -141,6 +156,11 @@ export default {
                 console.log(error);
             });
 
+        },
+        buildSubHeader: function(){
+            let subStr = new Date().toLocaleDateString();
+
+            this.subHeader = "Vuorokauden " + subStr + " säätiedot";
         }
     }
 }
@@ -162,6 +182,7 @@ hr{
 
 .headers{
 	font-family: 'Poiret One', cursive;
+    margin: 0;
 }
 
 .tableHeaders{
@@ -175,7 +196,7 @@ hr{
 }
 
 #mainContainer{
-	max-width: 1200px;
+	/*max-width: 1200px;*/
 	width: auto;
 	margin: auto;
 }
@@ -190,6 +211,7 @@ hr{
 
 #dailyTempChart{
     width: 33.33%;
+    max-height: 300px;
 }
 
 @media screen and (max-width: 580px){
@@ -200,5 +222,6 @@ hr{
     #fullTableContainer{
         flex-direction: column;
     }
+    
 }
 </style>
