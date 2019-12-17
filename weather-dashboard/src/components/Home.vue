@@ -59,7 +59,7 @@
         </div>
 
         <div id="fullchartContainer">
-            <v-chart :options="tempChartOption" id="dailyTempChart"/>
+            
         </div>
 
     </div>
@@ -67,15 +67,11 @@
 
 <script>
 
-import ECharts from 'vue-echarts';
-import 'echarts/lib/chart/line';
-
 var _ = require('lodash');
 
 export default {
     name: 'MainView',
     components: {
-        "v-chart": ECharts
     },
     props: {
     },
@@ -134,19 +130,8 @@ export default {
                 this.tempTableItems[0].latest = tempdataArr[tempdataArr.length - 1];
 
                 // config options for temperature chart
-                this.tempChartOption = {
-                    xAxis: {
-                        type: 'category',
-                        data: timedataArr
-                    },
-                    yAxis: {
-                        type: 'value'
-                    },
-                    series: [{
-                        data: tempdataArr,
-                        type: 'line'
-                    }]
-                }
+               
+               
                 // eslint-disable-next-line no-console
                 console.log(tempdataArr);
 
