@@ -166,14 +166,13 @@ hr{
 }
 
 .headers{
-	font-family: 'Poiret One', cursive;
+	/*font-family: 'Poiret One', cursive;*/
     margin: 0;
 }
 
 .tableHeaders{
     text-align: center;
     color: black;
-    font-weight: bold;
 }
 
 .tableContainer{
