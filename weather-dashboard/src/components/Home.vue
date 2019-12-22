@@ -59,7 +59,7 @@
         </div>
 
         <div id="fullchartContainer">
-            
+            <div id="dailyTempChart" ref="dailyTempChart"></div>
         </div>
 
     </div>
@@ -68,6 +68,7 @@
 <script>
 
 var _ = require('lodash');
+var Plotly = require('plotly.js');
 
 export default {
     name: 'MainView',
@@ -86,21 +87,17 @@ export default {
             tableFields: [
                 { key: "max" },
                 { key: "min" },
-                { key: "latest" }
+                { key: "viim" }
             ],
             tempTableItems: [
-                { max: 0, min: 0, latest: 0 }
+                { max: 0, min: 0, viim: 0 }
             ],
             humTableItems: [
-                { max: 0, min: 0, latest: 0 }
+                { max: 0, min: 0, viim: 0 }
             ],
             pressTableItems: [
-                { max: 0, min: 0, latest: 0 }
+                { max: 0, min: 0, viim: 0 }
             ],
-
-            // chart data
-            tempChartOption:{}
-
         }
     },
     mounted(){
@@ -127,10 +124,36 @@ export default {
                 // setting peak and latest values to table variables from daily temp data
                 this.tempTableItems[0].max = _.max(tempdataArr);
                 this.tempTableItems[0].min = _.min(tempdataArr);
-                this.tempTableItems[0].latest = tempdataArr[tempdataArr.length - 1];
+                this.tempTableItems[0].viim = tempdataArr[tempdataArr.length - 1];
 
                 // config options for temperature chart
-               
+                let tempData = [{
+                    x: timedataArr,
+                    y: tempdataArr
+                    }];
+                let tempLayout = {
+                    title: { text: "Vuorokauden lämpötila" },
+                    xaxis:{ title: "Kellonaika"},
+                    yaxis: { title: "Lämpötila"},
+                    margin: {
+                        t: 25,
+                        l: 35,
+                        b: 60,
+                        r: 0
+                        }
+                    };
+                let tempConfigOptions = {
+                    displayModeBar: false,
+                    responsive: true
+                };
+
+                let dailyTempChartVar = this.$refs.dailyTempChart;
+
+                Plotly.plot( dailyTempChartVar,
+                    tempData,
+                    tempLayout,
+                    tempConfigOptions
+                );
                
                 // eslint-disable-next-line no-console
                 console.log(tempdataArr);
@@ -144,7 +167,6 @@ export default {
         },
         buildSubHeader: function(){
             let subStr = new Date().toLocaleDateString();
-
             this.subHeader = "Vuorokauden " + subStr + " säätiedot";
         }
     }
@@ -153,7 +175,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 p {
 	font-size: 40px;
 	margin: 20px;
