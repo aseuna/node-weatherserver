@@ -37,7 +37,7 @@
                 id="tempTable"
                 >
                     <template v-slot:table-caption>
-                        <h4 class="headers tableHeaders">Ilman suht. kosteus</h4>
+                        <h4 class="headers tableHeaders">Ilman kosteus (%)</h4>
                     </template>
                 </b-table>
             </div>
@@ -126,11 +126,12 @@ export default {
                 this.tempTableItems[0].min = _.min(tempdataArr);
                 this.tempTableItems[0].viim = tempdataArr[tempdataArr.length - 1];
 
-                // config options for temperature chart
+                // temperature chart data options
                 let tempData = [{
                     x: timedataArr,
                     y: tempdataArr
                     }];
+                // chart layout options
                 let tempLayout = {
                     title: { text: "Vuorokauden lämpötila" },
                     xaxis:{ title: "Kellonaika"},
@@ -142,11 +143,13 @@ export default {
                         r: 0
                         }
                     };
+                // config options for chart
                 let tempConfigOptions = {
                     displayModeBar: false,
                     responsive: true
                 };
 
+                // selecting DOM element vue way
                 let dailyTempChartVar = this.$refs.dailyTempChart;
 
                 Plotly.plot( dailyTempChartVar,
@@ -166,7 +169,7 @@ export default {
 
         },
         buildSubHeader: function(){
-            let subStr = new Date().toLocaleDateString();
+            let subStr = new Date().toLocaleDateString("fi-FI");
             this.subHeader = "Vuorokauden " + subStr + " säätiedot";
         }
     }
@@ -175,6 +178,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+*{
+	margin: 0;
+	padding: 0;
+	border: none;
+	font-family: 'Arial', 'Helvetica','sans-serif';
+}
+
 p {
 	font-size: 40px;
 	margin: 20px;

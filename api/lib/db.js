@@ -19,8 +19,6 @@ module.exports = {
         try{
             this.con.end();
             this.con = null;
-            console.log("connection status:");
-            console.log(this.con);
         }
         catch(err){
             console.log(err);
