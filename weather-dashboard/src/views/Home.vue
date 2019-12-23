@@ -58,8 +58,10 @@
             </div>
         </div>
 
-        <div id="fullchartContainer">
-            <div id="dailyTempChart" ref="dailyTempChart"></div>
+        <div id="fullChartContainer">
+            <div id="dailyTempChart" ref="dailyTempChart" class="chartContainer"></div>
+            <div id="dailyHumChart" ref="dailyHumChart" class="chartContainer"></div>
+            <div id="dailyPressChart" ref="dailyPressChart" class="chartContainer"></div>
         </div>
 
     </div>
@@ -119,46 +121,16 @@ export default {
                     timedataArr.push(dailydata[i].time.substring(0, 5));
                     tempdataArr.push(_.round(parseFloat(dailydata[i].temperature), 1));
                 }
-                // setting data sets to chart data arrays
-
 
                 // setting peak and latest values to table variables from daily temp data
                 this.tempTableItems[0].max = _.max(tempdataArr);
                 this.tempTableItems[0].min = _.min(tempdataArr);
                 this.tempTableItems[0].viim = tempdataArr[tempdataArr.length - 1];
 
-                // temperature chart data options
-                let tempData = [{
-                    x: timedataArr,
-                    y: tempdataArr
-                    }];
-                // chart layout options
-                let tempLayout = {
-                    title: { text: "Vuorokauden lämpötila" },
-                    xaxis:{ title: "Kellonaika"},
-                    yaxis: { title: "Lämpötila"},
-                    margin: {
-                        t: 25,
-                        l: 35,
-                        b: 60,
-                        r: 0
-                        }
-                    };
-                // config options for chart
-                let tempConfigOptions = {
-                    displayModeBar: false,
-                    responsive: true
-                };
+                // calling draw function to draw a line graph from fetched data
+                this.drawLineGraph(tempdataArr, timedataArr, "temp", this.$refs.dailyTempChart);
+                // this.drawLineGraph(humdataArr, timedataArr, "hum", this.$refs.dailyHumChart);
 
-                // selecting DOM element vue way
-                let dailyTempChartVar = this.$refs.dailyTempChart;
-
-                Plotly.plot( dailyTempChartVar,
-                    tempData,
-                    tempLayout,
-                    tempConfigOptions
-                );
-               
                 // eslint-disable-next-line no-console
                 console.log(tempdataArr);
 
@@ -169,6 +141,74 @@ export default {
             });
 
         },
+        /**
+         * function to draw a line graph from fetched data with plotly.js library
+         */
+        drawLineGraph: function(dataArr, timedataArr, type, chartElement){
+
+            let graphTitle = {};
+            let yaxisTitle = {};
+
+            switch(type){
+                case "temp":
+                    graphTitle = {
+                        text: "Vuorokauden lämpötila"
+                    };
+                    yaxisTitle = {
+                        title: "Lämpötila (&deg;C)"
+                    };
+                    break;
+                case "hum":
+                    graphTitle = {
+                        text: "Vuorokauden ilmankosteus"
+                    };
+                    yaxisTitle = {
+                        title: "Ilmankosteus (%)"
+                    };
+                    break;
+                case "press":
+                    graphTitle = {
+                        text: "Vuorokauden ilmanpaine"
+                    };
+                    yaxisTitle = {
+                        title: "Ilmanpaine (kPa)"
+                    };
+                    break;
+            }
+
+            // temperature chart data options
+            let data = [{
+                x: timedataArr,
+                y: dataArr
+                }];
+            // chart layout options
+            let layout = {
+                title: graphTitle,
+                xaxis:{ title: "Kellonaika"},
+                yaxis: yaxisTitle,
+                margin: {
+                    t: 25,
+                    l: 35,
+                    b: 60,
+                    r: 10
+                    }
+                };
+            // config options for chart
+            let configOptions = {
+                displayModeBar: false,
+                responsive: true
+            };
+
+            // drawing a graph according to the config options
+            Plotly.plot( chartElement,
+                data,
+                layout,
+                configOptions
+            );
+        },
+        /**
+         * function for making a sub header for each day
+         */
         buildSubHeader: function(){
             let subStr = new Date().toLocaleDateString("fi-FI");
             this.subHeader = "Vuorokauden " + subStr + " säätiedot";
@@ -204,6 +244,11 @@ hr{
     width: 33.33%;
 }
 
+.chartContainer{
+    width: 33.33%;
+    max-height: 300px;
+}
+
 #mainContainer{
 	/*max-width: 1200px;*/
 	width: auto;
@@ -218,13 +263,18 @@ hr{
     flex-direction: row;
 }
 
-#dailyTempChart{
-    width: 33.33%;
-    max-height: 300px;
+#fullChartContainer{
+    display: flex;
+    flex-direction: row;
 }
+
 
 @media screen and (max-width: 580px){
     .tableContainer{
+        width: 100%;
+    }
+
+    .chartContainer{
         width: 100%;
     }
 
@@ -232,5 +282,8 @@ hr{
         flex-direction: column;
     }
     
+    #fullChartContainer{
+        flex-direction: column;
+    }
 }
 </style>
