@@ -1,8 +1,8 @@
 <template>
     <div id="app">
         <b-nav>
-            <b-nav-item>Etusivu</b-nav-item>
-            <b-nav-item>Haku</b-nav-item>
+            <b-nav-item><router-link to="/">Etusivu</router-link></b-nav-item>
+            <b-nav-item><router-link to="/find">Haku</router-link></b-nav-item>
             <b-nav-item>Meistä</b-nav-item>
         </b-nav>
         <router-view />
