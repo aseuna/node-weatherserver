@@ -1,8 +1,12 @@
 <template>
-  <div id="app">
-
-    <router-view />
-  </div>
+    <div id="app">
+        <b-nav>
+            <b-nav-item>Etusivu</b-nav-item>
+            <b-nav-item>Haku</b-nav-item>
+            <b-nav-item>Meistä</b-nav-item>
+        </b-nav>
+        <router-view />
+    </div>
 </template>
 
 <script>

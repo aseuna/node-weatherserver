@@ -68,7 +68,8 @@
 <script>
 
 var _ = require('lodash');
-var Plotly = require('plotly.js');
+// var Plotly = require('plotly.js');
+import Plotly from 'plotly.js/dist/plotly-basic.js';
 
 export default {
     name: 'MainView',
@@ -178,13 +179,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-*{
-	margin: 0;
-	padding: 0;
-	border: none;
-	font-family: 'Arial', 'Helvetica','sans-serif';
-}
-
 p {
 	font-size: 40px;
 	margin: 20px;
