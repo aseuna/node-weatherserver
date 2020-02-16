@@ -72,6 +72,7 @@ export default {
             fetch('http://localhost:3000/api/weatherdata', config)
             .then(response => response.json())
             .then(data => {
+                // ZERO SERACH RESULTS
                 let timedataArr = [];
                 let tempdataArr = [];
                 let humdataArr = [];
@@ -80,7 +81,7 @@ export default {
                 // setting temperature and time datasets to own arrays while rounding temps to 1 decimal
                 for(let i =0; i < data.length; i++)
                 {
-                    timedataArr.push(data[i].time.substring(0, 5));
+                    timedataArr.push(data[i].date.substring(0, 10) + ' ' + data[i].time.substring(0, 5));
                     tempdataArr.push(_.round(parseFloat(data[i].temperature), 1));
                     humdataArr.push(_.round(parseFloat(data[i].humidity), 1));
                     pressdataArr.push(_.round(parseFloat(data[i].pressure), 1));
@@ -103,7 +104,7 @@ export default {
             });
         },
         drawLineGraph: function(dataArr, timedataArr, type, chartElement){
-            // BUGGED NOT SURE IF BACK OR FRONT END
+            // ZERO SEARCH RESU*LTS
             let graphTitle = {};
             let yaxisTitle = {};
 

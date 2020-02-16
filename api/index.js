@@ -34,7 +34,6 @@ app.get("/api/dailydata", async function(req, res){
 
 app.post("/api/weatherdata", async function(req, res){
 
-    // BUGGED, not sure if back or front end
     // search weatherdata between two dates
     let startDate = req.body.start.replace(/-/g, "");
     let endDate = req.body.end.replace(/-/g, "");
