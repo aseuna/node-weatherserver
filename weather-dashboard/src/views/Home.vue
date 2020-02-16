@@ -114,12 +114,16 @@ export default {
             .then(dailydata => {
                 let timedataArr = [];
                 let tempdataArr = [];
+                let humdataArr = [];
+                let pressdataArr = [];
 
                 // setting temperature and time datasets to own arrays while rounding temps to 1 decimal
                 for(let i =0; i < dailydata.length; i++)
                 {
                     timedataArr.push(dailydata[i].time.substring(0, 5));
                     tempdataArr.push(_.round(parseFloat(dailydata[i].temperature), 1));
+                    humdataArr.push(_.round(parseFloat(dailydata[i].humidity), 1));
+                    pressdataArr.push(_.round(parseFloat(dailydata[i].pressure), 1));
                 }
 
                 // setting peak and latest values to table variables from daily temp data
@@ -127,9 +131,19 @@ export default {
                 this.tempTableItems[0].min = _.min(tempdataArr);
                 this.tempTableItems[0].viim = tempdataArr[tempdataArr.length - 1];
 
+                this.humTableItems[0].max = _.max(humdataArr);
+                this.humTableItems[0].min = _.min(humdataArr);
+                this.humTableItems[0].viim = humdataArr[humdataArr.length - 1];
+
+                this.pressTableItems[0].max = _.max(pressdataArr);
+                this.pressTableItems[0].min = _.min(pressdataArr);
+                this.pressTableItems[0].viim = pressdataArr[pressdataArr.length - 1];
+
                 // calling draw function to draw a line graph from fetched data
                 this.drawLineGraph(tempdataArr, timedataArr, "temp", this.$refs.dailyTempChart);
-                // this.drawLineGraph(humdataArr, timedataArr, "hum", this.$refs.dailyHumChart);
+                this.drawLineGraph(humdataArr, timedataArr, "hum", this.$refs.dailyHumChart);
+                this.drawLineGraph(pressdataArr, timedataArr, "press", this.$refs.dailyPressChart);
+
 
                 // eslint-disable-next-line no-console
                 console.log(tempdataArr);

@@ -15,8 +15,9 @@ app.get("/api/dailydata", async function(req, res){
     let datetime = new Date();
     let date = datetime.toISOString().slice(0,10);
     date = date.replace(/-/g, "");
+    date = date.replace(/2020/g, "2019");
 
-    let sql = `SELECT date, time, temperature FROM (SELECT date, time, temperature, humidity, pressure FROM weatherdata WHERE date=${date}) AS data ORDER BY time ASC;`;
+    let sql = `select date, time, temperature, humidity, pressure from weatherdata where date=${date};`;
     try{
         await db.connect();
         await db.con.query(sql, function (err, result, fields) {
