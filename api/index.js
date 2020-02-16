@@ -32,15 +32,22 @@ app.get("/api/dailydata", async function(req, res){
     }
 });
 
-app.get("/api/weatherdata", async function(req, res){
+app.post("/api/weatherdata", async function(req, res){
 
-    let max = {};
-    let min = {};
-    let current = {};
+    // BUGGED, not sure if back or front end
+    // search weatherdata between two dates
+    let startDate = req.body.start.replace(/-/g, "");
+    let endDate = req.body.end.replace(/-/g, "");
+
+    let sql = `select date, time, temperature, humidity, pressure from weatherdata where date <=${endDate} and date >=${startDate};`;
 
     try{
         await db.connect();
-        await db.con.query();
+        await db.con.query(sql, function(err, result, fields){
+            if (err) throw err;
+            // console.log(result);
+            res.json(result);
+        });
     }catch(err){
         console.log(err);
     }finally{

@@ -81,7 +81,7 @@ export default {
     },
     data(){
         return{
-            // misc
+            // subheader for denoting the date
             subHeader: "",
 
             // table data
@@ -185,7 +185,7 @@ export default {
                         text: "Vuorokauden ilmanpaine"
                     };
                     yaxisTitle = {
-                        title: "Ilmanpaine (kPa)"
+                        title: "Ilmanpaine (mbar)"
                     };
                     break;
             }
@@ -221,7 +221,7 @@ export default {
             );
         },
         /**
-         * function for making a sub header for each day
+         * function for making a subheader for each day
          */
         buildSubHeader: function(){
             let subStr = new Date().toLocaleDateString("fi-FI");
