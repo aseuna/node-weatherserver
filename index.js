@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const serveStatic = require('serve-static');
+const path = require('path');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 const db = require('./lib/db');
@@ -8,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-
+app.use(serveStatic(path.join(__dirname, 'dist')));
 
 app.get("/api/dailydata", async function(req, res){
     
@@ -44,7 +46,6 @@ app.post("/api/weatherdata", async function(req, res){
         await db.connect();
         await db.con.query(sql, function(err, result, fields){
             if (err) throw err;
-            // console.log(result);
             res.json(result);
         });
     }catch(err){
@@ -52,16 +53,6 @@ app.post("/api/weatherdata", async function(req, res){
     }finally{
         await db.close();
     }
-});
-
-app.post("/api/data", function(req, res){
-
-
-    db.con.query(sql, function (err, result, fields) {
-        if (err) throw err;
-        console.log(result);
-        //res.json(result);
-    });
 });
 
 

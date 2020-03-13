@@ -214,7 +214,7 @@ export default {
             };
 
             // drawing a graph according to the config options
-            Plotly.plot( chartElement,
+            Plotly.newPlot( chartElement,
                 data,
                 layout,
                 configOptions

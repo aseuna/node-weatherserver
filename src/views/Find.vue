@@ -50,11 +50,12 @@ export default {
     data(){
         return{
             startDate: "",
-            endDate: ""
+            endDate: "",
         }
     },
     methods:{
         onSubmitDate: function(){
+            //Zeroing data arrays
 
             let data = JSON.stringify(
                 {
@@ -72,10 +73,9 @@ export default {
             fetch('http://localhost:3000/api/weatherdata', config)
             .then(response => response.json())
             .then(data => {
-                // ZERO SERACH RESULTS
                 let timedataArr = [];
                 let tempdataArr = [];
-                let humdataArr = [];
+                let humdataArr =  [];
                 let pressdataArr = [];
 
                 // setting temperature and time datasets to own arrays while rounding temps to 1 decimal
@@ -87,15 +87,10 @@ export default {
                     pressdataArr.push(_.round(parseFloat(data[i].pressure), 1));
                 }
 
-
                 // calling draw function to draw a line graph from fetched data
                 this.drawLineGraph(tempdataArr, timedataArr, "temp", this.$refs.tempChart);
                 this.drawLineGraph(humdataArr, timedataArr, "hum", this.$refs.humChart);
                 this.drawLineGraph(pressdataArr, timedataArr, "press", this.$refs.pressChart);
-
-
-                // eslint-disable-next-line no-console
-                console.log(tempdataArr);
 
             })
             .catch(function(error){
@@ -104,7 +99,7 @@ export default {
             });
         },
         drawLineGraph: function(dataArr, timedataArr, type, chartElement){
-            // ZERO SEARCH RESU*LTS
+
             let graphTitle = {};
             let yaxisTitle = {};
 
@@ -159,7 +154,7 @@ export default {
             };
 
             // drawing a graph according to the config options
-            Plotly.plot( chartElement,
+            Plotly.newPlot( chartElement,
                 data,
                 layout,
                 configOptions
